@@ -1,0 +1,9 @@
+﻿################################################################################
+# この .gitignore ファイルは Microsoft(R) Visual Studio によって自動的に作成されました。
+################################################################################
+
+/.vs/QRCodekun
+/MVVMCore/bin/Debug/net5.0-windows
+/MVVMCore/obj
+/QRCodekun/bin/Debug/net5.0-windows
+/QRCodekun/obj
