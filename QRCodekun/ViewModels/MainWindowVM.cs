@@ -29,6 +29,30 @@ namespace QRCodekun.ViewModels
 
 	public class MainWindowVM : ViewModelBase
 	{
+		#region COMポート[COMPort]プロパティ
+		/// <summary>
+		/// COMポート[COMPort]プロパティ用変数
+		/// </summary>
+		int _COMPort = 3;
+		/// <summary>
+		/// COMポート[COMPort]プロパティ
+		/// </summary>
+		public int COMPort
+		{
+			get
+			{
+				return _COMPort;
+			}
+			set
+			{
+				if (!_COMPort.Equals(value))
+				{
+					_COMPort = value;
+					NotifyPropertyChanged("COMPort");
+				}
+			}
+		}
+		#endregion
 
 
 		#region DotNetBarcodeのQRコードオブジェクト[DotNetBarcodeQRCode]プロパティ
@@ -269,20 +293,14 @@ namespace QRCodekun.ViewModels
 
 		public override void Init(object sender, EventArgs e)
         {
-						// 接続
-			Connect();
+
 		}
 
         public override void Close(object sender, EventArgs e)
         {
-			// COMポートのクローズ
-			_serial.Close();
-
-			// オブジェクトの破棄
-			_serial.Dispose();
 		}
 
-        public void CreateQRCode()
+		public void CreateQRCode()
         {
 			try
 			{
@@ -351,9 +369,12 @@ namespace QRCodekun.ViewModels
 
 		static System.IO.Ports.SerialPort _serial;
 
-        void Connect()
+		/// <summary>
+		/// スキャナ接続処理
+		/// </summary>
+        public void Connect()
         {
-            _serial = new SerialPort("COM3");   // COMの名前を指定　デバイスマネージャーでDENSO WAVE Active USB-COM Portとなっているやつを探す
+            _serial = new SerialPort("COM"+this.COMPort.ToString());   // COMの名前を指定　デバイスマネージャーでDENSO WAVE Active USB-COM Portとなっているやつを探す
 
 			Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 			_serial.Encoding = Encoding.GetEncoding("shift_jis");
@@ -378,7 +399,19 @@ namespace QRCodekun.ViewModels
             _serial.WriteLine("R" + '\r');      // 読み取り可能状態に入る
         }
 
-        void Recieved(object sender, SerialDataReceivedEventArgs e)
+		/// <summary>
+		/// スキャナ切断処理
+		/// </summary>
+		public void Disconnect()
+		{
+			// COMポートのクローズ
+			_serial.Close();
+
+			// オブジェクトの破棄
+			_serial.Dispose();
+		}
+
+		void Recieved(object sender, SerialDataReceivedEventArgs e)
         {
 			string text = _serial.ReadExisting().Trim();
 			byte[] data = System.Text.Encoding.GetEncoding("shift_jis").GetBytes(text);

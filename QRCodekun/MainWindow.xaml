@@ -24,6 +24,22 @@
         <GroupBox Margin="5" Header="QRコード設定">
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="5" Text="接続COMポート"/>
+                    <TextBox Margin="5" Width="50" Text="{Binding COMPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <ToggleButton Content="スキャナ接続">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="Checked">
+                                <b:CallMethodAction TargetObject="{Binding}" MethodName="Connect"/>
+                            </b:EventTrigger>
+                            <b:EventTrigger EventName="Unchecked">
+                                <b:CallMethodAction TargetObject="{Binding}" MethodName="Disconnect"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+
+                    </ToggleButton>
+
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Margin="5" Text="QRコード文字列:"/>
                     <TextBox Margin="5" Width="500" Text="{Binding QRCodeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <b:Interaction.Triggers>
