@@ -11,11 +11,12 @@ namespace QRCodekun.Models
 {
     public class QRCodeBase : ModelBase
 	{
-		#region [ErrorText]プロパティ
-		/// <summary>
-		/// [ErrorText]プロパティ用変数
-		/// </summary>
-		string _ErrorText = string.Empty;
+        #region プロパティ
+        #region [ErrorText]プロパティ
+        /// <summary>
+        /// [ErrorText]プロパティ用変数
+        /// </summary>
+        string _ErrorText = string.Empty;
 		/// <summary>
 		/// [ErrorText]プロパティ
 		/// </summary>
@@ -60,10 +61,6 @@ namespace QRCodekun.Models
 		}
 		#endregion
 
-
-
-
-
 		#region QRコード[QRCodeImage]プロパティ
 		/// <summary>
 		/// QRコード[QRCodeImage]プロパティ用変数
@@ -87,10 +84,17 @@ namespace QRCodekun.Models
 				}
 			}
 		}
-		#endregion
+        #endregion
+        #endregion
 
-
-		protected static BitmapImage StreamToBitmapImage(MemoryStream ms)
+        #region 関数
+        #region StreamをBitmapイメージに変換する関数
+        /// <summary>
+        /// StreamをBitmapイメージに変換する関数
+        /// </summary>
+        /// <param name="ms">MemoryStream</param>
+        /// <returns>BitmapImage</returns>
+        protected static BitmapImage StreamToBitmapImage(MemoryStream ms)
         {
             // MemoryStreamをシーク
             ms.Seek(0, System.IO.SeekOrigin.Begin);
@@ -107,6 +111,7 @@ namespace QRCodekun.Models
             bitmapImage.EndInit();
             return bitmapImage;
         }
-
-    }
+		#endregion
+		#endregion
+	}
 }

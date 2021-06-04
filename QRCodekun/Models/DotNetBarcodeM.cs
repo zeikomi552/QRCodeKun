@@ -13,6 +13,13 @@ namespace QRCodekun.Models
 {
     public class DotNetBarcodeM : QRCodeBase
     {
+        #region 関数
+        #region 誤り訂正率の定義をライブラリ用に変換
+        /// <summary>
+        /// 誤り訂正率の定義をライブラリ用に変換
+        /// </summary>
+        /// <param name="level">誤り訂正率</param>
+        /// <returns>ライブラリ用に変換した結果</returns>
         public static DotNetBarcode.QRECCRates ConvertEcL(QRCodeErrorCorrectionLevel level)
         {
             switch (level)
@@ -35,10 +42,20 @@ namespace QRCodekun.Models
                         return DotNetBarcode.QRECCRates.HighQuality30Percent;
                     }
             }
-
         }
+        #endregion
 
-
+        #region QRコードの作成処理
+        /// <summary>
+        /// QRコードの作成処理
+        /// </summary>
+        /// <param name="text">文字列</param>
+        /// <param name="err_correct">誤り訂正率</param>
+        /// <param name="qr_ver">QRコードバージョン</param>
+        /// <param name="width">幅</param>
+        /// <param name="height">高さ</param>
+        /// <param name="quit_zone">クワイエットゾーン</param>
+        /// <returns>QRコードイメージ</returns>
         public static BitmapImage Create(string text,
             DotNetBarcode.QRECCRates err_correct = DotNetBarcode.QRECCRates.Medium15Percent,
             DotNetBarcode.QRVersions qr_ver = DotNetBarcode.QRVersions.Ver02,
@@ -74,5 +91,7 @@ namespace QRCodekun.Models
                 throw;
             }
         }
+        #endregion
+        #endregion
     }
 }

@@ -13,11 +13,20 @@ namespace QRCodekun.Models
 {
     public class ThoughtWorksM : QRCodeBase
     {
+        #region 関数
+        #region 誤り訂正率の定義をライブラリ用に変換
+        /// <summary>
+        /// 誤り訂正率の定義をライブラリ用に変換
+        /// </summary>
+        /// <param name="level">誤り訂正率</param>
+        /// <returns>ライブラリ用に変換した結果</returns>
         public static int ConvertEcL(QRCodeErrorCorrectionLevel level)
         {
             return (int)level;
         }
+        #endregion
 
+        #region QRコード作成関数
         /// <summary>
         /// QRコード作成関数
         /// </summary>
@@ -35,8 +44,9 @@ namespace QRCodekun.Models
             return Create(text, sjis, qr_ver, err_correct, scale);
 
         }
+        #endregion
 
-
+        #region QRコード作成関数
         /// <summary>
         /// QRコード作成関数
         /// </summary>
@@ -79,5 +89,7 @@ namespace QRCodekun.Models
                 throw;
             }
         }
+        #endregion
+        #endregion
     }
 }
