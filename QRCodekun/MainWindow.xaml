@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:QRCodekun"
         xmlns:ViewModels="clr-namespace:QRCodekun.ViewModels" xmlns:b="http://schemas.microsoft.com/xaml/behaviors" x:Class="QRCodekun.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="auto" Width="auto">
+        Title="QRコード比較" Height="700" Width="850">
     <Window.DataContext>
         <ViewModels:MainWindowVM/>
     </Window.DataContext>
@@ -21,18 +21,46 @@
                 <b:CallMethodAction TargetObject="{Binding}" MethodName="Init"/>
             </b:EventTrigger>
         </b:Interaction.Triggers>
-        <StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="QRCode文字列:"/>
-                <TextBox Width="500" Text="{Binding QRCodeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <b:Interaction.Triggers>
-                        <b:EventTrigger EventName="TextChanged">
-                            <b:CallMethodAction TargetObject="{Binding}" MethodName="CreateQRCode"/>
-                        </b:EventTrigger>
-                    </b:Interaction.Triggers>
-                </TextBox>
+        <GroupBox Margin="5" Header="QRコード設定">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="5" Text="QRコード文字列:"/>
+                    <TextBox Margin="5" Width="500" Text="{Binding QRCodeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="TextChanged">
+                                <b:CallMethodAction TargetObject="{Binding}" MethodName="CreateQRCode"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Margin="5" Text="QRコードバージョン"/>
+                    <ComboBox VerticalAlignment="Center" ItemsSource="{Binding QRCodeVersion}"
+                              DisplayMemberPath="Key" SelectedValuePath="Value" SelectedValue="{Binding SelectedQRCodeVersion}"
+                              Margin="5" HorizontalAlignment="Left" Width="100">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:CallMethodAction TargetObject="{Binding}" MethodName="CreateQRCode"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Margin="5" Text="誤り訂正率"/>
+                    <ComboBox VerticalAlignment="Center" ItemsSource="{Binding QRCorrectRatio}"
+                              DisplayMemberPath="Key" SelectedValuePath="Value" SelectedValue="{Binding SelectedQRCorrectRatio}"
+                              Margin="5" HorizontalAlignment="Left" Width="150">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:CallMethodAction TargetObject="{Binding}" MethodName="CreateQRCode"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+
+                    </ComboBox>
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
+        </GroupBox>
 
         <StackPanel  Orientation="Horizontal" Grid.Row="1">
             <GroupBox Margin="5" Header="ThoughtWorks">
@@ -44,8 +72,8 @@
                     </Border>
                     <StackPanel DataContext="{Binding ThoughtWorksQRCode}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="経過時間(ミリ秒):"/>
-                            <TextBlock Text="{Binding ErapsedMillisecond}"/>
+                            <TextBlock Text="経過時間:"/>
+                            <TextBlock Text="{Binding Erapsed}"/>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock Text="エラー:"/>
@@ -64,8 +92,8 @@
                     </Border>
                     <StackPanel DataContext="{Binding ZxingQRCode}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="経過時間(ミリ秒):"/>
-                            <TextBlock Text="{Binding ErapsedMillisecond}"/>
+                            <TextBlock Text="経過時間:"/>
+                            <TextBlock Text="{Binding Erapsed}"/>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock Text="エラー:"/>
@@ -84,8 +112,8 @@
                     </Border>
                     <StackPanel DataContext="{Binding DotNetBarcodeQRCode}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="経過時間(ミリ秒):"/>
-                            <TextBlock Text="{Binding ErapsedMillisecond}"/>
+                            <TextBlock Text="経過時間:"/>
+                            <TextBlock Text="{Binding Erapsed}"/>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock Text="エラー:"/>
@@ -96,16 +124,18 @@
             </GroupBox>
 
         </StackPanel>
-        
-        <StackPanel Grid.Row="2">
-            <Button Margin="5" HorizontalAlignment="Left" Width="100" Content="Clear">
-                <b:Interaction.Triggers>
-                    <b:EventTrigger EventName="Click">
-                        <b:CallMethodAction TargetObject="{Binding}" MethodName="Clear"/>
-                    </b:EventTrigger>
-                </b:Interaction.Triggers>
-            </Button>
-            <TextBlock Margin="5" Text="{Binding ReaderText}"/>
-        </StackPanel>
+
+        <GroupBox Header="QRコード読み取り結果" Grid.Row="2">
+            <StackPanel>
+                <Button Margin="5" HorizontalAlignment="Left" Width="100" Content="Clear">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Click">
+                            <b:CallMethodAction TargetObject="{Binding}" MethodName="Clear"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </Button>
+                <TextBlock Margin="5" Text="{Binding ReaderText}"/>
+            </StackPanel>
+        </GroupBox>
     </Grid>
 </Window>

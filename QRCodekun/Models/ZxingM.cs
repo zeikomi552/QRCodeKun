@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QRCodekun.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
@@ -13,8 +14,34 @@ namespace QRCodekun.Models
 {
     public class ZxingM : QRCodeBase
     {
+        public static ZXing.QrCode.Internal.ErrorCorrectionLevel ConvertEcL(QRCodeErrorCorrectionLevel level)
+        {
+            switch (level)
+            {
+                case QRCodeErrorCorrectionLevel.Low7Percent:
+                default:
+                    {
+                        return ZXing.QrCode.Internal.ErrorCorrectionLevel.L;
+                    }
+                case QRCodeErrorCorrectionLevel.Medium15Percent:
+                    {
+                        return ZXing.QrCode.Internal.ErrorCorrectionLevel.M;
+                    }
+                case QRCodeErrorCorrectionLevel.Quality25Percent:
+                    {
+                        return ZXing.QrCode.Internal.ErrorCorrectionLevel.Q;
+                    }
+                case QRCodeErrorCorrectionLevel.HighQuality30Percent:
+                    {
+                        return ZXing.QrCode.Internal.ErrorCorrectionLevel.H;
+                    }
+            }
 
-        public static BitmapImage Create(string text, string encode = "Shift_JIS", int width=200, int height=200, int version=2)
+        }
+        public static BitmapImage Create(string text,
+            ZXing.QrCode.Internal.ErrorCorrectionLevel level,
+            int version = 2,
+            string encode = "Shift_JIS", int width=200, int height=200)
         {
             try
             {
@@ -24,7 +51,7 @@ namespace QRCodekun.Models
                 QrCodeEncodingOptions options = new QrCodeEncodingOptions()
                 {
                     //CharacterSet = "UTF-8",
-                    ErrorCorrection = ZXing.QrCode.Internal.ErrorCorrectionLevel.M,
+                    ErrorCorrection = level,
                     QrVersion = version,
                     Height = height,
                     Width = width,
@@ -35,6 +62,7 @@ namespace QRCodekun.Models
 
                 writer.Options = options;
                 writer.Format = format;
+
 
                 // 文字列を指定してQRコードを生成
                 using (var image = writer.Write(text))

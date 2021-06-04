@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QRCodekun.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
@@ -12,27 +13,41 @@ namespace QRCodekun.Models
 {
     public class ThoughtWorksM : QRCodeBase
     {
+        public static int ConvertEcL(QRCodeErrorCorrectionLevel level)
+        {
+            return (int)level;
+        }
 
-        public static BitmapImage Create(string text, 
-            int qr_ver = 2, int scale = 4, int err_correct = 1)
+        /// <summary>
+        /// QRコード作成関数
+        /// </summary>
+        /// <param name="text">文字列</param>
+        /// <param name="qr_ver">QRコードバージョン</param>
+        /// <param name="err_correct">誤り訂正率</param>
+        /// <param name="scale">QRコードサイズ</param>
+        /// <returns>ビットマップイメージ</returns>
+        public static BitmapImage Create(string text, int err_correct = 1
+            , int qr_ver = 2, int scale = 4)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var sjis = Encoding.GetEncoding("shift_jis");
 
-            return Create(text, sjis, qr_ver, scale, err_correct);
+            return Create(text, sjis, qr_ver, err_correct, scale);
 
         }
 
+
         /// <summary>
-        /// 
+        /// QRコード作成関数
         /// </summary>
-        /// <param name="text"></param>
-        /// <param name="enc"></param>
-        /// <param name="qr_ver"></param>
-        /// <param name="scale"></param>
-        /// <param name="error_correct"></param>
-        /// <returns></returns>
-        public static BitmapImage Create(string text, Encoding enc, int qr_ver, int scale, int error_correct)
+        /// <param name="text">文字列</param>
+        /// <param name="enc">エンコード</param>
+        /// <param name="qr_ver">バージョン</param>
+        /// <param name="err_correct">誤り訂正率</param>
+        /// <param name="scale">QRコードサイズ</param>
+        /// <returns>ビットマップイメージ</returns>
+        public static BitmapImage Create(string text, Encoding enc,
+            int qr_ver = 2, int err_correct = 1, int scale = 1)
         {
             try
             {
@@ -43,7 +58,7 @@ namespace QRCodekun.Models
                     QRCodeEncoder.ENCODE_MODE.ALPHA_NUMERIC;
 
                 // エラー訂正はM
-                qrEnc.QRCodeErrorCorrect = (QRCodeEncoder.ERROR_CORRECTION)error_correct;
+                qrEnc.QRCodeErrorCorrect = (QRCodeEncoder.ERROR_CORRECTION)err_correct;
 
                 qrEnc.QRCodeVersion = qr_ver; // バージョン（1～40）
                 qrEnc.QRCodeScale = scale; // 1セルのピクセル数

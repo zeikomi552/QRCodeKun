@@ -35,30 +35,33 @@ namespace QRCodekun.Models
 			}
 		}
 		#endregion
-		#region 経過時間[ErapsedMillisecond]プロパティ
+		#region 経過時間[Erapsed]プロパティ
 		/// <summary>
-		/// 経過時間[ErapsedMillisecond]プロパティ用変数
+		/// 経過時間[Erapsed]プロパティ用変数
 		/// </summary>
-		long _ErapsedMillisecond = 0;
+		string _Erapsed = string.Empty;
 		/// <summary>
-		/// 経過時間[ErapsedMillisecond]プロパティ
+		/// 経過時間[Erapsed]プロパティ
 		/// </summary>
-		public long ErapsedMillisecond
+		public string Erapsed
 		{
 			get
 			{
-				return _ErapsedMillisecond;
+				return _Erapsed;
 			}
 			set
 			{
-				if (!_ErapsedMillisecond.Equals(value))
+				if (!_Erapsed.Equals(value))
 				{
-					_ErapsedMillisecond = value;
-					NotifyPropertyChanged("ErapsedMillisecond");
+					_Erapsed = value;
+					NotifyPropertyChanged("Erapsed");
 				}
 			}
 		}
 		#endregion
+
+
+
 
 
 		#region QRコード[QRCodeImage]プロパティ
