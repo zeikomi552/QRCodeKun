@@ -29,6 +29,14 @@ namespace QRCodekun.ViewModels
 
 	public class MainWindowVM : ViewModelBase
 	{
+        #region プロパティ
+        #region シリアルポートオブジェクト
+        /// <summary>
+        /// シリアルポートオブジェクト
+        /// </summary>
+        static System.IO.Ports.SerialPort _serial;
+		#endregion
+
 		#region COMポート[COMPort]プロパティ
 		/// <summary>
 		/// COMポート[COMPort]プロパティ用変数
@@ -53,7 +61,6 @@ namespace QRCodekun.ViewModels
 			}
 		}
 		#endregion
-
 
 		#region DotNetBarcodeのQRコードオブジェクト[DotNetBarcodeQRCode]プロパティ
 		/// <summary>
@@ -209,6 +216,7 @@ namespace QRCodekun.ViewModels
 			}
 		}
 		#endregion
+
 		#region 誤り訂正率[QRCorrectRatio]プロパティ
 		/// <summary>
 		/// 誤り訂正率[QRCorrectRatio]プロパティ用変数
@@ -239,6 +247,7 @@ namespace QRCodekun.ViewModels
 			}
 		}
 		#endregion
+
 		#region 選択されている誤り訂正率[SelectedQRCorrectRatio]プロパティ
 		/// <summary>
 		/// 選択されている誤り訂正率[SelectedQRCorrectRatio]プロパティ用変数
@@ -264,7 +273,6 @@ namespace QRCodekun.ViewModels
 		}
 		#endregion
 
-
 		#region 選択されているQRコードのバージョン[SelectedQRCodeVersion]プロパティ
 		/// <summary>
 		/// 選択されているQRコードのバージョン[SelectedQRCodeVersion]プロパティ用変数
@@ -288,18 +296,37 @@ namespace QRCodekun.ViewModels
 				}
 			}
 		}
+        #endregion
+        #endregion
+
+        #region 関数
+        #region 画面初期化時
+        /// <summary>
+        /// 画面初期化時
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public override void Init(object sender, EventArgs e)
+        {
+
+		}
 		#endregion
 
-
-		public override void Init(object sender, EventArgs e)
+		#region 画面クローズ時
+		/// <summary>
+		/// 画面クローズ時
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		public override void Close(object sender, EventArgs e)
         {
-
 		}
+		#endregion
 
-        public override void Close(object sender, EventArgs e)
-        {
-		}
-
+		#region QRコードの作成処理
+		/// <summary>
+		/// QRコードの作成処理
+		/// </summary>
 		public void CreateQRCode()
         {
 			try
@@ -361,18 +388,14 @@ namespace QRCodekun.ViewModels
 			{
 				this.ZxingQRCode.ErrorText = e.Message;
 			}
-
-
 		}
+		#endregion
 
-
-
-		static System.IO.Ports.SerialPort _serial;
-
+		#region スキャナ接続処理
 		/// <summary>
 		/// スキャナ接続処理
 		/// </summary>
-        public void Connect()
+		public void Connect()
         {
             _serial = new SerialPort("COM"+this.COMPort.ToString());   // COMの名前を指定　デバイスマネージャーでDENSO WAVE Active USB-COM Portとなっているやつを探す
 
@@ -398,7 +421,9 @@ namespace QRCodekun.ViewModels
 
             _serial.WriteLine("R" + '\r');      // 読み取り可能状態に入る
         }
+		#endregion
 
+		#region スキャナ切断処理
 		/// <summary>
 		/// スキャナ切断処理
 		/// </summary>
@@ -410,7 +435,14 @@ namespace QRCodekun.ViewModels
 			// オブジェクトの破棄
 			_serial.Dispose();
 		}
+		#endregion
 
+		#region スキャナ読み取りレシーブ時
+		/// <summary>
+		/// スキャナ読み取りレシーブ時
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void Recieved(object sender, SerialDataReceivedEventArgs e)
         {
 			string text = _serial.ReadExisting().Trim();
@@ -425,11 +457,17 @@ namespace QRCodekun.ViewModels
 			}
 			this.ReaderText += "\r\n";
         }
+		#endregion
 
+		#region 読み取り結果クリア
+		/// <summary>
+		/// 読み取り結果クリア
+		/// </summary>
 		public void Clear()
         {
 			this.ReaderText = string.Empty;
         }
-
+		#endregion
+		#endregion
 	}
 }
